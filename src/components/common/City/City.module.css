@@ -1,0 +1,14 @@
+.city {
+    max-width: fit-content;
+}
+
+.img {
+    max-width: auto;
+    height: 250px;
+    margin-bottom: 20px;
+}
+
+.description {
+    font-size: 38px;
+    text-align: center;
+}

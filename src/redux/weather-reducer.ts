@@ -11,6 +11,7 @@ export type WeatherActionsType = ReturnType<InferValueType<typeof actions>>;
 // State
 
 const initialState = {
+  initializePropcess: false,
   coord: {
     lon: -122.08,
     lat: 37.39,
@@ -58,12 +59,15 @@ const initialState = {
 // Actions
 
 const SET_WEATHER = "weather/weather/GET_WEATHER";
+const SET_INITIALIZE_PROCESS = "weather/weather/SET_INITIALIZE_PROCESS";
 
 // Action Creators
 
 const actions = {
   setWeather: (data: InitialStateType) =>
     ({ type: SET_WEATHER, data } as const),
+  setInitializePropcess: (isInitialize: boolean) =>
+    ({ type: SET_INITIALIZE_PROCESS, isInitialize } as const),
 };
 
 // Reducer
@@ -73,6 +77,11 @@ const weatherReducer = (
   action: WeatherActionsType
 ) => {
   switch (action.type) {
+    case SET_INITIALIZE_PROCESS:
+      return {
+        ...state,
+        initializePropcess: action.isInitialize,
+      };
     case SET_WEATHER:
       return {
         ...action.data,
@@ -84,13 +93,19 @@ const weatherReducer = (
 
 // Thunks
 
-export const getWeather = (city: string): ThunkAction<Promise<void>, StateType, unknown, WeatherActionsType> => {
-    return async (dispatch) => {
-        const response = await weatherApi.getWeather(city);
-        if (response.cod === 200) {
-            dispatch(actions.setWeather(response));
-        }
+export const getWeather = (
+  city: string
+): ThunkAction<Promise<void>, StateType, unknown, WeatherActionsType> => {
+  return async (dispatch, getState) => {
+    if (!getState().weather.initializePropcess) {
+      dispatch(actions.setInitializePropcess(true));
+      const response = await weatherApi.getWeather(city);
+      dispatch(actions.setInitializePropcess(false));
+      if (response.cod === 200) {
+        dispatch(actions.setWeather(response));
+      }
     }
-}
+  };
+};
 
 export default weatherReducer;

@@ -1,0 +1,13 @@
+.weather {
+  color: #4c63c8;
+  text-align: center;
+}
+
+.temp {
+  font-size: 86px;
+  margin-bottom: 5px;
+}
+
+.description {
+  font-size: 24px;
+}

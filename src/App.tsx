@@ -1,14 +1,20 @@
 import styles from "./App.module.css";
-import Search from "./components/common/Search/Search";
-import Weather from "./components/common/Weather/Weather";
+import CityContainer from "./components/common/City/CityContainer";
+import SearchContainer from "./components/common/Search/SearchContainer";
+import WeatherContainer from "./components/common/Weather/WeatherContainer";
 
-const App: React.FC = (props) => {
-  return <div className={styles.app}>
-    <div className="container">
-      <Search />
-      <Weather />
+const App: React.FC = () => {
+  return (
+    <div className={styles.app}>
+      <div className="container">
+        <div className={styles.content}>
+          <SearchContainer />
+          <WeatherContainer />
+          <CityContainer />
+        </div>
+      </div>
     </div>
-  </div>;
+  );
 };
 
 export default App;
