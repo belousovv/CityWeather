@@ -9,8 +9,8 @@ import Weather from "./Weather";
 
 type MapStateType = {
   city: string | null;
-  temp: number;
-  description: string;
+  temp: number | null;
+  description: string | null;
 };
 
 type MapDispatchType = {};
@@ -24,7 +24,7 @@ type PropsType = MapStateType & MapDispatchType & OwnType;
 const WeatherContainer: React.FC<PropsType> = (props) => {
   return (
     <>
-      {props.city && props.temp && (
+      {props.city && props.temp && props.description && (
         <Weather temp={props.temp} description={props.description}/>
       )}
     </>
