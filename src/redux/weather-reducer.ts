@@ -12,6 +12,7 @@ export type WeatherActionsType = ReturnType<InferValueType<typeof actions>>;
 
 const initialState = {
   initializePropcess: false,
+  isError: false,
   coord: {
     lon: null,
     lat: null,
@@ -60,6 +61,7 @@ const initialState = {
 
 const SET_WEATHER = "weather/weather/GET_WEATHER";
 const SET_INITIALIZE_PROCESS = "weather/weather/SET_INITIALIZE_PROCESS";
+const SET_IS_ERROR = "weather/weather/SET_IS_ERROR";
 
 // Action Creators
 
@@ -68,6 +70,7 @@ const actions = {
     ({ type: SET_WEATHER, data } as const),
   setInitializePropcess: (isInitialize: boolean) =>
     ({ type: SET_INITIALIZE_PROCESS, isInitialize } as const),
+  setIsError: (toggle: boolean) => ({ type: SET_IS_ERROR, toggle } as const),
 };
 
 // Reducer
@@ -77,6 +80,11 @@ const weatherReducer = (
   action: WeatherActionsType
 ) => {
   switch (action.type) {
+    case SET_IS_ERROR:
+      return {
+        ...state,
+        isError: action.toggle,
+      };
     case SET_INITIALIZE_PROCESS:
       return {
         ...state,
@@ -99,11 +107,16 @@ export const getWeather = (
   return async (dispatch, getState) => {
     if (!getState().weather.initializePropcess) {
       dispatch(actions.setInitializePropcess(true));
-      const response = await weatherApi.getWeather(city);
-      dispatch(actions.setInitializePropcess(false));
-      if (response.cod === 200) {
-        dispatch(actions.setWeather(response));
+      dispatch(actions.setIsError(false));
+      try {
+        const response = await weatherApi.getWeather(city);
+        if (response.cod === 200) {
+          dispatch(actions.setWeather(response));
+        }
+      } catch (e) {
+        dispatch(actions.setIsError(true));
       }
+      dispatch(actions.setInitializePropcess(false));
     }
   };
 };

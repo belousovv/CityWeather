@@ -11,3 +11,7 @@ export const selectTemp = (state: StateType) => {
 export const selectDescription = (state: StateType) => {
     return state.weather.weather[0].description;
 }
+
+export const selectError = (state: StateType) => {
+    return state.weather.isError;
+}

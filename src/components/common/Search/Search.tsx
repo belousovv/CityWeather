@@ -15,15 +15,13 @@ const Search: React.FC<PropsType> = (props) => {
 
   return (
     <form className={styles.search} onSubmit={props.handleSubmit(props.onSubmitCity)}>
-      {/* <label> */}
         <input
           className={styles.input}
           type="text"
           title="city"
-          {...props.register("search")}
+          {...props.register("search", {required: true})}
           placeholder="city"
         />
-      {/* </label> */}
     </form>
   );
 };
